@@ -4,7 +4,7 @@ from overkill.extra.writers import PipeWriter
 __all__ = ("Bar", "manager")
 
 class Bar(Sink, PipeWriter):
-    cmd = ["bar"]
+    cmd = ["bar-aint-recursive"]
     def __init__(self):
         super().__init__()
 
