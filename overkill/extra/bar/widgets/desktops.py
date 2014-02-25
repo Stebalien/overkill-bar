@@ -17,9 +17,13 @@
 
 from .base import SimpleWidget, BaseWidget
 from overkill.sinks import Sink
+from .. import colors
+
+def format_escape(string):
+    return string.replace("{", "{{").replace("}", "}}")
 
 class DesktopsWidget(SimpleWidget):
-    ACTIVE_DESKTOP_FORMAT = "\\b2\\u7 {} \\ur\\br"
+    ACTIVE_DESKTOP_FORMAT = format_escape(colors.DARK.bg + colors.RED.u + "%{+u}") + " {} " + format_escape("%{-u}" + colors.RESET.bg)
     INACTIVE_DESKTOP_FORMAT = " {} "
     subscription = "desktops"
 
@@ -51,7 +55,7 @@ class MultiMonitorWidget(Sink, BaseWidget):
             self.render()
 
         if "monitors" in updates:
-            new_monitors = updates["monitors"]
+            new_monitors = list(reversed(updates["monitors"]))
             new_names = [m.name for m in new_monitors]
             old_names = [m.name for m in self.monitors]
             if old_names != new_names:
@@ -64,7 +68,7 @@ class MultiMonitorWidget(Sink, BaseWidget):
                         self.subscribe_to("text", widget)
 
                 for monitor in self.monitors:
-                    if monitor not in new_widgets:
+                    if monitor not in new_widgets and monitor in self.widgets:
                         self.unsubscribe_from("text", self.widgets[monitor])
 
                 self.widgets = new_widgets
@@ -76,7 +80,8 @@ class MultiMonitorWidget(Sink, BaseWidget):
             self.render()
 
     def render(self):
+
         self.text = "".join(
-            r"\s%i%s%s" % (i, r"\f7  \fr" if m.focused else r"\f3  \fr", t)
+            r"%%{S%i}%%{l}%s%s" % (i, (colors.RED.fg if m.focused else colors.GREY.fg) + "  " + colors.RESET.fg, t)
             for i, (t, m) in enumerate(zip(self.text_pieces, self.monitors))
         )

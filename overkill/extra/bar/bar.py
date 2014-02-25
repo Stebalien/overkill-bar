@@ -21,7 +21,13 @@ from overkill.extra.writers import PipeWriter
 __all__ = ("Bar", "manager")
 
 class Bar(Sink, PipeWriter):
-    cmd = ["bar-aint-recursive"]
+    cmd = ["bar-aint-recursive",
+           "-B", "#151515",
+           "-F", "#aaaaaa",
+           '-g', 'x18',
+           '-u', '2',
+           '-f', '-*-montecarlo-medium-r-normal-*-10-110-72-72-c-60-*-*,-misc-stlarch-medium-r-*-*-10-100-*-*-*-*-*-*'
+          ]
     def __init__(self):
         super().__init__()
 

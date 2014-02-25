@@ -16,6 +16,7 @@
 ##
 
 from .base import Widget
+from .. import colors
 from overkill.sinks import Sink
 class AudioWidget(Sink, Widget):
     width = 3
@@ -31,7 +32,7 @@ class AudioWidget(Sink, Widget):
 
     def handle_updates(self, updates, source):
         self.data.update(updates)
-        self.prefix = (r"\f9" if self.data["playing"] else r"\f3") \
-                    + (r"" if self.data["muted"] else r"") + r"\fr" 
-        self.postfix = r"\ur"
+        self.prefix = (colors.GREEN.fg if self.data["playing"] else colors.GREY.fg) \
+                    + (r"" if self.data["muted"] else r"") + colors.RESET.fg
+        self.postfix = colors.RESET.u
         self.text = str(self.data["volume"])
