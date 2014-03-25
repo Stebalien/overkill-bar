@@ -17,6 +17,7 @@
 
 from overkill.sources import Source
 from overkill.sinks import Sink, SimpleSink
+from overkill import manager
 
 class BaseWidget(Source):
     publishes = ["text"]
@@ -83,71 +84,64 @@ class SimpleWidget(SimpleSink, Widget):
 from threading import Thread, Event
 import time
 
-def debounce(timeout, max_delay=None):
-    def wrapper(fn):
-        interrupt = Event();
-        called = False
-        thread = None
-        last_args = ()
-        last_kwargs = {}
-        call_by = None
-
-        def run():
-            nonlocal called, call_by
-            while True:
-                if called:
-                    if not call_by:
-                        call_by = time.time() + max_delay
-                        next_timeout = timeout
-                    else:
-                        next_timeout = min(timeout, call_by - time.time())
-
-                    if next_timeout > 0:
-                        interrupt.wait(next_timeout)
-                    
-                    if not interrupt.is_set():
-                        call_by = False
-                        called = False
-                        fn(*last_args, **last_kwargs)
-                else:
-                    interrupt.wait()
-                interrupt.clear()
-
-
-        def do(*args, **kwargs):
-            nonlocal called, thread, last_args, last_kwargs
-            last_args = args
-            last_kwargs = kwargs
-            called = True
-            if not thread:
-                thread = Thread(target=run)
-                thread.start()
-            else:
-                interrupt.set()
-
-        return do
-    return wrapper
-
-
 class Layout(Sink, Widget):
-    def __init__(self, widgets, separator="", debounce_params=None, *args, **kwargs):
+    def __init__(self, widgets, separator="", min_delay=None, max_delay=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        if debounce_params:
-            self.render = debounce(*debounce_params)(self.render)
         self.separator = separator
+        self.__do_render = Event()
+        self.min_delay = min_delay
+        self.max_delay = max_delay
         self.widgets = {w:i for i, w in enumerate(widgets)}
         self.text_pieces = [""]*len(widgets)
 
-    def start(self):
-        if super().start():
-            for widget in self.widgets:
-                self.subscribe_to("text", widget)
-            return True
-        return False
+    def on_start(self):
+        for widget in self.widgets:
+            self.subscribe_to("text", widget)
+
+        if self.min_delay:
+            self.__render_thread = Thread(target=self.__render_loop)
+            self.__render_thread.start()
+        else:
+            self.render = self.__render
+            self.__render_thread = None
+
+    def on_stop(self):
+        if self.render_thread:
+            self.__do_render.set()
+            self.__render_thread.join()
 
     def render(self):
+        self.__do_render.set()
+
+    def __render_loop(self):
+        call_by = None
+        called = False
+        while self.running:
+            if called:
+                if not call_by:
+                    call_by = time.time() + self.max_delay
+                    next_timeout = self.min_delay
+                else:
+                    next_timeout = min(self.min_delay, call_by - time.time())
+
+                if next_timeout > 0:
+                    self.__do_render.wait(next_timeout)
+
+                if not self.__do_render.is_set():
+                    call_by = None
+                    called = False
+                    self.__render()
+            else:
+                self.__do_render.wait()
+                called = True
+            self.__do_render.clear()
+
+    def __render(self):
         self.text = self.separator.join(self.text_pieces)
 
     def handle_updates(self, update, source):
         self.text_pieces[self.widgets[source]] = update["text"]
         self.render()
+
+    def unsubscribe(self, *args, **kwargs):
+        super().unsubscribe(*args, **kwargs)
