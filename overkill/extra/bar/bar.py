@@ -15,12 +15,14 @@
 #    along with Overkill-bar.  If not, see <http://www.gnu.org/licenses/>.
 ##
 
+from overkill.sources import Source
 from overkill.sinks import Sink
+from overkill.sinks import PipeSink
 from overkill.extra.writers import PipeWriter
 
 __all__ = ("Bar", "manager")
 
-class Bar(Sink, PipeWriter):
+class Bar(PipeSink, PipeWriter, Sink, Source):
     cmd = ["bar-aint-recursive",
            "-B", "#151515",
            "-F", "#aaaaaa",
@@ -28,14 +30,17 @@ class Bar(Sink, PipeWriter):
            '-u', '2',
            '-f', '-*-montecarlo-medium-r-normal-*-10-110-72-72-c-60-*-*,-misc-stlarch-medium-r-*-*-10-100-*-*-*-*-*-*'
           ]
+
     def __init__(self):
         super().__init__()
 
     def set_widget(self, widget):
         self.widget = widget
         self.num_monitors = None
+        self.publishes = widget.emits[:]
 
     def handle_updates(self, updates, source):
+        super().handle_updates(updates, source)
         if source == self.widget:
             self.write(updates["text"])
         elif "monitors" in updates:
@@ -48,3 +53,7 @@ class Bar(Sink, PipeWriter):
         self.subscribe_to("text", self.widget)
         self.subscribe_to("monitors")
 
+    def handle_input(self, line):
+        words = line.split(' ', 2)
+        if words[0] == 'emit':
+            self.push_updates({words[1]: words[2]})

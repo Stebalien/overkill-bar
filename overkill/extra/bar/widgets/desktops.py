@@ -23,8 +23,9 @@ def format_escape(string):
     return string.replace("{", "{{").replace("}", "}}")
 
 class DesktopsWidget(SimpleWidget):
-    ACTIVE_DESKTOP_FORMAT = format_escape(colors.DARK.bg + colors.RED.u + "%{+u}") + " {} " + format_escape("%{-u}" + colors.RESET.bg)
-    INACTIVE_DESKTOP_FORMAT = " {} "
+    emits = ["wm.desktop.focus"]
+    ACTIVE_DESKTOP_FORMAT = format_escape(colors.DARK.bg + colors.RED.u + "%{+u}") + " {desktop.name} " + format_escape("%{-u}" + colors.RESET.bg)
+    INACTIVE_DESKTOP_FORMAT = "%{{A:emit wm.desktop.focus {desktop.index}:}} {desktop.name} %{{A}}"
     subscription = "desktops"
 
     def __init__(self, monitor=None):
@@ -34,12 +35,13 @@ class DesktopsWidget(SimpleWidget):
 
     def handle_update(self, desktops):
         self.text = "".join(
-            (self.ACTIVE_DESKTOP_FORMAT if desktop.focused else self.INACTIVE_DESKTOP_FORMAT).format(desktop.name)
+            (self.ACTIVE_DESKTOP_FORMAT if desktop.focused else self.INACTIVE_DESKTOP_FORMAT).format(desktop=desktop)
             for desktop in desktops if desktop.occupied or desktop.focused
         )
 
 
 class MultiMonitorWidget(Sink, BaseWidget):
+    emits = ["wm.desktop.focus", "wm.desktop.layout"]
     def on_start(self):
         self.subscribe_to("monitors")
         self.monitors = []
@@ -82,6 +84,6 @@ class MultiMonitorWidget(Sink, BaseWidget):
     def render(self):
 
         self.text = "".join(
-            r"%%{S%i}%%{l}%s%s" % (i, (colors.RED.fg if m.focused else colors.GREY.fg) + "  " + colors.RESET.fg, t)
+            r"%%{S%i}%%{l}%%{A:emit wm.desktop.layout next:}%s%%{A}%s" % (i, (colors.RED.fg if m.focused else colors.GREY.fg) + "  " + colors.RESET.fg, t)
             for i, (t, m) in enumerate(zip(self.text_pieces, self.monitors))
         )

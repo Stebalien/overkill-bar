@@ -21,6 +21,7 @@ from overkill import manager
 
 class BaseWidget(Source):
     publishes = ["text"]
+    emits = []
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.__buffer = ""
@@ -36,7 +37,6 @@ class BaseWidget(Source):
 
     def handle_unsubscribe(self, subscription, source):
         self.text = "-"
-
 
 class TextWidget(BaseWidget):
     def __init__(self, text):
@@ -92,6 +92,7 @@ class Layout(Sink, Widget):
         self.min_delay = min_delay
         self.max_delay = max_delay
         self.widgets = {w:i for i, w in enumerate(widgets)}
+        self.emits = sum((w.emits for w in widgets), [])
         self.text_pieces = [""]*len(widgets)
 
     def on_start(self):
@@ -126,7 +127,7 @@ class Layout(Sink, Widget):
 
                 if next_timeout > 0:
                     self.__do_render.wait(next_timeout)
-
+                
                 if not self.__do_render.is_set():
                     call_by = None
                     called = False
@@ -145,3 +146,4 @@ class Layout(Sink, Widget):
 
     def unsubscribe(self, *args, **kwargs):
         super().unsubscribe(*args, **kwargs)
+
