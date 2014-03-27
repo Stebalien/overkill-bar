@@ -17,7 +17,6 @@
 
 from overkill.sources import Source
 from overkill.sinks import Sink, SimpleSink
-from overkill import manager
 
 class BaseWidget(Source):
     publishes = ["text"]
@@ -107,7 +106,7 @@ class Layout(Sink, Widget):
             self.__render_thread = None
 
     def on_stop(self):
-        if self.render_thread:
+        if self.__render_thread:
             self.__do_render.set()
             self.__render_thread.join()
 
