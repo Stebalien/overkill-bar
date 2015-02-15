@@ -20,27 +20,27 @@ from overkill.sinks import Sink
 from .. import colors
 
 class MemWidget(SimpleWidget):
-    prefix = colors.GREY("")
+    prefix = colors.FADED("")
     width = 3
     subscription = "memperc"
 
 class CPUWidget(SimpleWidget):
     width = 3
     subscription = "cpu"
-    prefix = colors.GREY("")
+    prefix = colors.FADED("")
 
 class TempWidget(SimpleWidget):
     width = 2
     subscription = "acpitemp"
-    prefix = colors.GREY(" ")
+    prefix = colors.FADED(" ")
 
 class BatteryWidget(SimpleWidget):
     width = 4
     subscription = "battery_short"
-    prefix = colors.GREY(" ")
+    prefix = colors.FADED(" ")
 
 class NetWidget(Sink, Widget):
-    prefix = colors.GREY(" ")
+    prefix = colors.FADED(" ")
 
     def __init__(self, interfaces=None, **kwargs):
         super().__init__(**kwargs)
@@ -67,5 +67,5 @@ class NetWidget(Sink, Widget):
                 self.data["upspeed"] += float(value)
             elif key.startswith("downspeedf"):
                 self.data["downspeed"] += float(value)
-        self.text = r"{upspeed:>5.1f}{grey}u{reset} {downspeed:>5.1f}{grey}d{reset}".format(reset=colors.RESET.fg, grey=colors.GREY.fg, **self.data)
+        self.text = r"{upspeed:>5.1f}{grey}u{reset} {downspeed:>5.1f}{grey}d{reset}".format(reset=colors.RESET.fg, grey=colors.FADED.fg, **self.data)
 

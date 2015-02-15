@@ -19,16 +19,17 @@ from overkill.sources import Source
 from overkill.sinks import Sink
 from overkill.sinks import PipeSink
 from overkill.extra.writers import PipeWriter
+from . import colors
 
-__all__ = ("Bar", "manager")
+__all__ = ("Bar",)
 
 class Bar(PipeSink, PipeWriter, Sink, Source):
     cmd = ["bar-aint-recursive",
-           "-B", "#151515",
-           "-F", "#aaaaaa",
+           "-B", colors.BACKGROUND,
+           "-F", colors.DEFAULT,
            '-g', 'x18',
            '-u', '2',
-           '-f', '-*-montecarlo-medium-r-normal-*-10-110-72-72-c-60-*-*,-misc-stlarch-medium-r-*-*-10-100-*-*-*-*-*-*'
+           '-f', '-*-fixed-medium-r-normal-*-10-*-*-*-*-*-*-*,-misc-stlarch-medium-r-*-*-10-100-*-*-*-*-*-*'
           ]
 
     def __init__(self):

@@ -24,7 +24,7 @@ def format_escape(string):
 
 class DesktopsWidget(SimpleWidget):
     emits = ["wm.desktop.focus"]
-    ACTIVE_DESKTOP_FORMAT = format_escape(colors.DARK.bg + colors.RED.u + "%{+u}") + " {desktop.name} " + format_escape("%{-u}" + colors.RESET.bg)
+    ACTIVE_DESKTOP_FORMAT = format_escape(colors.DARK.bg + colors.HIGHLIGHT.u + "%{+u}") + " {desktop.name} " + format_escape("%{-u}" + colors.RESET.bg)
     INACTIVE_DESKTOP_FORMAT = "%{{A:emit wm.desktop.focus {desktop.index}:}} {desktop.name} %{{A}}"
     subscription = "desktops"
 
@@ -84,6 +84,6 @@ class MultiMonitorWidget(Sink, BaseWidget):
     def render(self):
 
         self.text = "".join(
-            r"%%{S%i}%%{l}%%{A:emit wm.desktop.layout next:}%s%%{A}%s" % (i, (colors.RED.fg if m.focused else colors.GREY.fg) + "  " + colors.RESET.fg, t)
+            r"%%{S%i}%%{l}%%{A:emit wm.desktop.layout next:}%s%%{A}%s" % (i, (colors.HIGHLIGHT.fg if m.focused else colors.FADED.fg) + "  " + colors.RESET.fg, t)
             for i, (t, m) in enumerate(zip(self.text_pieces, self.monitors))
         )

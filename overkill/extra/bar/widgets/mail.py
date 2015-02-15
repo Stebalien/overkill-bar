@@ -20,12 +20,12 @@ from .base import SimpleWidget, Sink, Widget
 from .. import colors
 
 class MailCountWidget(SimpleWidget):
-    prefix = colors.GREY.fg + " " + colors.RESET.fg
+    prefix = colors.FADED.fg + " " + colors.RESET.fg
     width = 2
     subscription = "mailcount"
 
 class ExtendedMailCountWidget(Sink, Widget):
-    prefix = colors.GREY.fg + r" " + colors.RESET.fg
+    prefix = colors.FADED.fg + r" " + colors.RESET.fg
     def on_start(self):
         self.data = {
             "mailcount": 0,
@@ -37,5 +37,5 @@ class ExtendedMailCountWidget(Sink, Widget):
     def handle_updates(self, updates, source):
         self.data.update(updates)
 
-        self.prefix = (colors.ORANGE.fg if (self.data["mailqueue"] > 0) else colors.GREY.fg) + " " + colors.RESET.fg
+        self.prefix = (colors.WARNING.fg if (self.data["mailqueue"] > 0) else colors.FADED.fg) + " " + colors.RESET.fg
         self.text = str(self.data["mailcount"])

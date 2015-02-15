@@ -32,7 +32,7 @@ class AudioWidget(Sink, Widget):
 
     def handle_updates(self, updates, source):
         self.data.update(updates)
-        self.prefix = (colors.GREEN.fg if self.data["playing"] else colors.GREY.fg) \
+        self.prefix = (colors.ACTIVE.fg if self.data["playing"] else colors.FADED.fg) \
                     + (r"" if self.data["muted"] else r"") + colors.RESET.fg
         self.postfix = colors.RESET.u
         self.text = str(self.data["volume"])

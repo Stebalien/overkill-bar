@@ -1,3 +1,4 @@
+from os import getenv
 
 class Color(str):
     def __init__(self, initial):
@@ -8,10 +9,20 @@ class Color(str):
     def __call__(self, string):
         return self.fg + string + RESET.fg
 
-GREEN = Color("#afd700")
-DARK = Color("#2a2a2a")
-GREY = Color("#555555")
-RED = Color("#a6000a")
-GREEN = Color("#afd700")
-RESET = Color("-")
-BRIGHT = Color("#eeeeee")
+def get_color(name, default):
+    color = getenv("COLOR_{}".format(name))
+    if color is None:
+        return default
+    return "#ff{}".format(color[1:])
+
+DEFAULT     = Color(get_color("DEFAULT", "#ffaaaaaa"))
+BACKGROUND  = Color(get_color("ACTIVE", "#ff151515"))
+ACTIVE      = Color(get_color("ACTIVE", "#ffafd700"))
+DARK        = Color(get_color("DARK", "#ff2a2a2a"))
+FADED       = Color(get_color("FADED", "#ff555555"))
+RESET       = Color("-")
+BRIGHT      = Color(get_color("BRIGHT", "#ffeeeeee"))
+WARNING     = Color(get_color("WARNING", "#ffff7e00"))
+HIGHLIGHT   = Color(get_color("HIGHLIGHT", '#ff589CC5'))
+
+del get_color
