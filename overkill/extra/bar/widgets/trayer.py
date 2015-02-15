@@ -29,13 +29,21 @@ class TrayerWidget(PipeSink, BaseWidget):
         # That's why we restart xprop and pray...
         self.panel = subprocess.Popen(self.panel_cmd)
 
+    def on_stop(self):
+        if self.panel:
+            try:
+                self.panel.terminate()
+                self.panel.wait()
+            except:
+                pass
+
     def handle_input(self, line):
         try:
             _, width = line.split(' ')
             self.width = int(width)
             self.render()
         except:
-            # TODO: Somethign else?
+            # TODO: Something else?
             self.stop()
 
     def render(self):
