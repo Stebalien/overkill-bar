@@ -1,4 +1,5 @@
 from .base import BaseWidget
+from .. import colors
 from overkill.sinks import PipeSink
 import subprocess
 
@@ -17,12 +18,17 @@ class TrayerWidget(PipeSink, BaseWidget):
         "--align", "right",
         "--widthtype", "request",
         "--height", "18",
-        "--tint", "0x151515",
+        "--tint", "0x" + colors.BACKGROUND[-6:].lower(),
         "--transparent", "true",
         "--expand", "true",
         "--SetDockType", "true",
         "--alpha", "0"
     ]
+
+    def __init__(self):
+        super().__init__()
+        self.width = 0
+        self.panel = None
 
     def on_start(self):
         # Yes there is a race condition...
