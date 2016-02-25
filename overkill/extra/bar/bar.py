@@ -24,12 +24,13 @@ from . import colors
 __all__ = ("Bar",)
 
 class Bar(PipeSink, PipeWriter, Sink, Source):
-    cmd = ["bar-aint-recursive",
+    cmd = ["lemonbar",
            "-B", colors.BACKGROUND,
            "-F", colors.DEFAULT,
            '-g', 'x18',
            '-u', '2',
-           '-f', '-*-fixed-medium-r-normal-*-10-*-*-*-*-*-*-*,-misc-stlarch-medium-r-*-*-10-100-*-*-*-*-*-*'
+           '-f', '-*-fixed-medium-r-normal-*-10-*-*-*-*-*-*-*',
+           '-f', '-misc-stlarch-medium-r-*-*-10-100-*-*-*-*-*-*'
           ]
 
     def __init__(self):
