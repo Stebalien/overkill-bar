@@ -16,7 +16,7 @@ def get_color(name, default):
     return "#ff{}".format(color[1:])
 
 DEFAULT     = Color(get_color("DEFAULT", "#ffaaaaaa"))
-BACKGROUND  = Color(get_color("ACTIVE", "#ff151515"))
+BACKGROUND  = Color(get_color("BACKGROUND", "#ff151515"))
 ACTIVE      = Color(get_color("ACTIVE", "#ffafd700"))
 DARK        = Color(get_color("DARK", "#ff2a2a2a"))
 FADED       = Color(get_color("FADED", "#ff555555"))
