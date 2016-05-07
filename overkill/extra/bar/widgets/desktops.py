@@ -24,7 +24,7 @@ def format_escape(string):
 
 class DesktopsWidget(SimpleWidget):
     emits = ["wm.desktop.focus"]
-    ACTIVE_DESKTOP_FORMAT = format_escape(colors.DARK.bg + colors.HIGHLIGHT.u + "%{+u}") + " {desktop.name} " + format_escape("%{-u}" + colors.RESET.bg)
+    ACTIVE_DESKTOP_FORMAT = format_escape(colors.SELECT.bg + colors.HIGHLIGHT.u + "%{+u}") + " {desktop.name} " + format_escape("%{-u}" + colors.RESET.bg)
     INACTIVE_DESKTOP_FORMAT = "%{{A:emit wm.desktop.focus {desktop.index}:}} {desktop.name} %{{A}}"
     subscription = "desktops"
 
