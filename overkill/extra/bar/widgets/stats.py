@@ -15,8 +15,8 @@
 #    along with Overkill-bar.  If not, see <http://www.gnu.org/licenses/>.
 ##
 
-from .base import SimpleWidget, Widget
 from overkill.sinks import Sink, SimpleSink
+from .base import SimpleWidget, Widget
 from .. import colors
 
 class MemWidget(SimpleWidget):
@@ -78,5 +78,8 @@ class NetWidget(Sink, Widget):
                 self.data["upspeed"] += float(value)
             elif key.startswith("downspeedf"):
                 self.data["downspeed"] += float(value)
-        self.text = r"{upspeed:>5.1f}{grey}u{reset} {downspeed:>5.1f}{grey}d{reset}".format(reset=colors.RESET.fg, grey=colors.FADED.fg, **self.data)
-
+        self.text = r"{upspeed:>5.1f}{grey}u{reset} {downspeed:>5.1f}{grey}d{reset}".format(
+            reset=colors.RESET.fg,
+            grey=colors.FADED.fg,
+            **self.data
+        )
