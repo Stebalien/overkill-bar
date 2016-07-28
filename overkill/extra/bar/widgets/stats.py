@@ -60,7 +60,7 @@ class TempWidget(SimpleWidget):
     def handle_update(self, update):
         color = colors.FADED
         try:
-            if int(update) >= 80:
+            if int(update) >= 90:
                 color = colors.WARNING
         except:
             pass
