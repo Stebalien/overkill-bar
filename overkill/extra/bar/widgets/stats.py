@@ -16,7 +16,7 @@
 ##
 
 from .base import SimpleWidget, Widget
-from overkill.sinks import Sink
+from overkill.sinks import Sink, SimpleSink
 from .. import colors
 
 class MemWidget(SimpleWidget):
@@ -34,10 +34,18 @@ class TempWidget(SimpleWidget):
     subscription = "acpitemp"
     prefix = colors.FADED(" ")
 
-class BatteryWidget(SimpleWidget):
-    width = 4
+class BatteryWidget(SimpleSink, Widget):
+    width = 3
     subscription = "battery_short"
-    prefix = colors.FADED(" ")
+    prefix = colors.FADED(" ")
+
+    def handle_update(self, update):
+        (prefix, perc) = update.split(' ')
+        if prefix == "D":
+            self.prefix = colors.FADED(" ")
+        else:
+            self.prefix = colors.FADED(" ")
+        self.text = str(perc)
 
 class NetWidget(Sink, Widget):
     prefix = colors.FADED(" ")
