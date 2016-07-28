@@ -30,7 +30,7 @@ class Bar(PipeSink, PipeWriter, Sink, Source):
            '-g', 'x18',
            '-u', '2',
            '-f', '-*-fixed-medium-r-normal-*-10-*-*-*-*-*-*-*',
-           '-f', '-misc-stlarch-medium-r-*-*-10-100-*-*-*-*-*-*'
+           '-f', '-*-siji-medium-r-*-*-10-100-*-*-*-*-*-*'
           ]
 
     def __init__(self):

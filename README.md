@@ -6,9 +6,9 @@ Overkill-bar is a collection of widgets that can be used with
 [bar-aint-recursive](https://github.com/LemonBoy/bar) to draw a text-based
 status bar.
 
-Currently, the widgets assume that you have
-[stlarch\_font](https://sourceforge.net/projects/stlarchfont) installed and set
-as your backup bar-aint-recursive font.
+Currently, the widgets assume that you have the
+[siji](https://github.com/stark/siji) bitmap font installed and set as your
+backup bar-aint-recursive font.
 
 Future Work
 -----------
