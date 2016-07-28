@@ -15,7 +15,7 @@
 #    along with Overkill-bar.  If not, see <http://www.gnu.org/licenses/>.
 ##
 
-from overkill.sinks import Sink, SimpleSink
+from overkill.sinks import Sink
 from .base import SimpleWidget, Widget
 from .. import colors
 
@@ -24,28 +24,70 @@ class MemWidget(SimpleWidget):
     width = 3
     subscription = "memperc"
 
+    def handle_update(self, update):
+        color = colors.FADED
+        try:
+            if int(update) >= 80:
+                color = colors.WARNING
+        except:
+            pass
+
+        self.prefix = color("")
+        self.text = str(update)
+
 class CPUWidget(SimpleWidget):
     width = 3
     subscription = "cpu"
     prefix = colors.FADED("")
+
+    def handle_update(self, update):
+        color = colors.FADED
+        try:
+            if int(update) >= 20:
+                color = colors.WARNING
+        except:
+            pass
+
+        self.prefix = color("")
+        self.text = str(update)
+
 
 class TempWidget(SimpleWidget):
     width = 2
     subscription = "acpitemp"
     prefix = colors.FADED(" ")
 
-class BatteryWidget(SimpleSink, Widget):
+    def handle_update(self, update):
+        color = colors.FADED
+        try:
+            if int(update) >= 80:
+                color = colors.WARNING
+        except:
+            pass
+        self.prefix = color(" ")
+        self.text = str(update)
+
+
+class BatteryWidget(SimpleWidget):
     width = 3
     subscription = "battery_short"
-    prefix = colors.FADED(" ")
+    prefix = colors.FADED("")
 
     def handle_update(self, update):
         try:
             (prefix, perc) = update.split(' ')
-            if prefix == "D":
-                self.prefix = colors.FADED(" ")
+            perc = perc.strip('%')
+
+            if int(perc) < 10:
+                color = colors.WARNING
             else:
-                self.prefix = colors.FADED(" ")
+                color = colors.FADED
+
+            if prefix == "D":
+                self.prefix = color("")
+            else:
+                self.prefix = color("")
+
             self.text = perc
         except:
             self.text = update
