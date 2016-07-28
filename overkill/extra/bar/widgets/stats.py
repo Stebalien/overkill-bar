@@ -86,22 +86,22 @@ class BatteryWidget(SimpleWidget):
     prefix = colors.FADED("")
 
     def handle_update(self, update):
-        try:
+        if update[:1] in ("C", "U", "D"):
             (prefix, perc) = update.split(' ')
             perc = perc.strip('%')
-
-            if int(perc) < 10:
-                color = colors.WARNING
-            else:
-                color = colors.FADED
-
             if prefix == "D":
-                self.prefix = color("")
+                if int(perc) < 10:
+                    self.prefix = colors.WARNING("")
+                else:
+                    self.prefix = colors.FADED("")
             else:
-                self.prefix = color("")
-
+                self.prefix = colors.FADED("")
             self.text = perc
-        except:
+        elif update == "F":
+            self.prefix = colors.FADED("")
+            self.text = "99" # Fits better... 🙈
+        else:
+            self.prefix = colors.FADED("")
             self.text = update
 
 class NetWidget(Sink, Widget):
