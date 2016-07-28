@@ -40,12 +40,15 @@ class BatteryWidget(SimpleSink, Widget):
     prefix = colors.FADED(" ")
 
     def handle_update(self, update):
-        (prefix, perc) = update.split(' ')
-        if prefix == "D":
-            self.prefix = colors.FADED(" ")
-        else:
-            self.prefix = colors.FADED(" ")
-        self.text = str(perc)
+        try:
+            (prefix, perc) = update.split(' ')
+            if prefix == "D":
+                self.prefix = colors.FADED(" ")
+            else:
+                self.prefix = colors.FADED(" ")
+            self.text = perc
+        except:
+            self.text = update
 
 class NetWidget(Sink, Widget):
     prefix = colors.FADED(" ")
