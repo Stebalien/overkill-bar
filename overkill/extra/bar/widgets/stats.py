@@ -15,6 +15,8 @@
 #    along with Overkill-bar.  If not, see <http://www.gnu.org/licenses/>.
 ##
 
+import time
+
 from overkill.sinks import Sink
 from .base import SimpleWidget, Widget
 from .. import colors
@@ -40,11 +42,21 @@ class CPUWidget(SimpleWidget):
     subscription = "cpu"
     prefix = colors.FADED("")
 
+    def __init__(self, *args, **kwargs):
+        self.pegging = None
+        super().__init__(*args, **kwargs)
+
     def handle_update(self, update):
         color = colors.FADED
         try:
             if int(update) >= 24:
-                color = colors.WARNING
+                if self.pegging is None:
+                    self.pegging = time.monotonic()
+                elif self.pegging is True or (time.monotonic() - self.pegging) > 10:
+                    self.pegging = True
+                    color = colors.WARNING
+            else:
+                self.pegging = None
         except:
             pass
 
