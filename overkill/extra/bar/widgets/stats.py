@@ -43,7 +43,7 @@ class CPUWidget(SimpleWidget):
     def handle_update(self, update):
         color = colors.FADED
         try:
-            if int(update) >= 20:
+            if int(update) >= 24:
                 color = colors.WARNING
         except:
             pass
