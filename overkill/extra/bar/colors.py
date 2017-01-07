@@ -10,10 +10,10 @@ class Color(str):
         return self.fg + string + RESET.fg
 
 def get_color(name, default):
-    color = getenv("COLOR_{}".format(name))
+    color = getenv(f"COLOR_{name}")
     if color is None:
         return default
-    return "#ff{}".format(color[1:])
+    return f"#ff{color[1:]}"
 
 DEFAULT     = Color(get_color("DEFAULT", "#ffaaaaaa"))
 BACKGROUND  = Color(get_color("BACKGROUND", "#ff151515"))

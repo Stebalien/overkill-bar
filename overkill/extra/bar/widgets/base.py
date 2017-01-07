@@ -60,12 +60,7 @@ class Widget(BaseWidget):
 
     @BaseWidget.text.setter
     def text(self, value):
-        BaseWidget.text.fset(self, "{prefix}{value:{align}{width}s}{postfix}".format(
-            prefix=self.prefix,
-            postfix=self.postfix,
-            align=self.align,
-            width=self.width, value=value
-        ))
+        BaseWidget.text.fset(self, f"{self.prefix}{value:{self.align}{self.width}s}{self.postfix}")
 
 class SimpleWidget(SimpleSink, Widget):
 
