@@ -30,6 +30,7 @@ class Bar(PipeSink, PipeWriter, Sink, Source):
            '-g', 'x18',
            '-u', '2',
            '-f', '-*-fixed-medium-r-normal-*-10-*-*-*-*-*-*-*',
+           '-f', '-*-montecarlo-bold-r-normal-*-11-*-*-*-*-*-*-*',
            '-f', '-*-siji-medium-r-*-*-10-100-*-*-*-*-*-*'
           ]
 
