@@ -39,6 +39,7 @@ class BaseWidget(Source):
 
 class TextWidget(BaseWidget):
     def __init__(self, text):
+        super().__init__()
         self.text = text
 
 class Widget(BaseWidget):
