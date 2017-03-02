@@ -54,7 +54,8 @@ class Bar(PipeSink, PipeWriter, Sink, Source):
 
     def on_start(self):
         self.subscribe_to("text", self.widget)
-        self.subscribe_to("monitors")
+        if self.is_publishing("monitors"):
+            self.subscribe_to("monitors")
 
     def handle_input(self, line):
         words = line.split(' ', 2)
