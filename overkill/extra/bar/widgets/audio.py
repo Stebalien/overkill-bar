@@ -33,6 +33,27 @@ class AudioWidget(Sink, Widget):
     def handle_updates(self, updates, source):
         self.data.update(updates)
         self.prefix = (colors.ACTIVE.fg if self.data["playing"] else colors.ICON.fg) \
-                    + (r"" if self.data["muted"] else r"") + colors.RESET.fg
+                    + (r"" if self.data["muted"] else r"") + colors.RESET.fg
         self.postfix = colors.RESET.u
         self.text = str(self.data["volume"])
+
+class RecordingWidget(Sink, Widget):
+    width = 3
+    def on_start(self):
+        self.data = {
+            "recording": False,
+            "mic_muted": False,
+        }
+        self.subscribe_to("recording")
+        self.subscribe_to("mic_muted")
+
+    def handle_updates(self, updates, source):
+        self.data.update(updates)
+        if self.data["recording"]:
+            if self.data["mic_muted"]:
+                self.text = colors.ACTIVE("")
+            else:
+                self.text = colors.ACTIVE("")
+        else:
+            self.text = " "
+
