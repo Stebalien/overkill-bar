@@ -16,10 +16,12 @@
 ##
 
 from .base import SimpleWidget
+from .. import colors
 import time
 
 class ClockWidget(SimpleWidget):
     subscription = "time"
+    prefix = colors.ICON(" ")
 
     def __init__(self, fmt="%Y.%m.%d", *args, **kwargs):
         self.fmt = fmt

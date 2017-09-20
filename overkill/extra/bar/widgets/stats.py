@@ -22,32 +22,32 @@ from .base import SimpleWidget, Widget
 from .. import colors
 
 class MemWidget(SimpleWidget):
-    prefix = colors.FADED("")
+    prefix = colors.ICON("")
     width = 3
     subscription = "memperc"
 
     def handle_update(self, update):
-        color = colors.FADED
+        color = colors.ICON
         try:
             if int(update) >= 80:
                 color = colors.WARNING
         except:
             pass
 
-        self.prefix = color("")
-        self.text = str(update)
+        self.prefix = color("")
+        self.text = f'{int(update):02d}'
 
 class CPUWidget(SimpleWidget):
     width = 3
     subscription = "cpu"
-    prefix = colors.FADED("")
+    prefix = colors.ICON("")
 
     def __init__(self, *args, **kwargs):
         self.pegging = None
         super().__init__(*args, **kwargs)
 
     def handle_update(self, update):
-        color = colors.FADED
+        color = colors.ICON
         try:
             if int(update) >= 24:
                 if self.pegging is None:
@@ -60,30 +60,30 @@ class CPUWidget(SimpleWidget):
         except:
             pass
 
-        self.prefix = color("")
-        self.text = str(update)
+        self.prefix = color("")
+        self.text = f'{int(update):02d}'
 
 
 class TempWidget(SimpleWidget):
     width = 2
     subscription = "acpitemp"
-    prefix = colors.FADED(" ")
+    prefix = colors.ICON(" ")
 
     def handle_update(self, update):
-        color = colors.FADED
+        color = colors.ICON
         try:
             if int(update) >= 90:
                 color = colors.WARNING
         except:
             pass
-        self.prefix = color(" ")
-        self.text = str(update)
+        self.prefix = color(" ")
+        self.text = f'{int(update):02d}'
 
 
 class BatteryWidget(SimpleWidget):
     width = 3
     subscription = "battery_short"
-    prefix = colors.FADED("")
+    prefix = colors.ICON("")
 
     def handle_update(self, update):
         if update[:1] in ("C", "U", "D"):
@@ -91,21 +91,28 @@ class BatteryWidget(SimpleWidget):
             perc = perc.strip('%')
             if prefix == "D":
                 if int(perc) < 10:
-                    self.prefix = colors.WARNING("")
+                    self.prefix = colors.WARNING("")
                 else:
-                    self.prefix = colors.FADED("")
+                    self.prefix = colors.ICON("")
             else:
-                self.prefix = colors.FADED("")
-            self.text = perc
+                self.prefix = colors.ICON("")
+            self.text = f'{int(perc):02d}'
         elif update == "F":
-            self.prefix = colors.FADED("")
+            self.prefix = colors.ICON("")
             self.text = "99" # Fits better... 🙈
         else:
-            self.prefix = colors.FADED("")
-            self.text = update
+            self.prefix = colors.ICON("")
+            self.text = f'{int(update):02d}'
+
+def format_speed(speed):
+    if speed < 100:
+        return f'{speed:<03.1f}k'
+    speed /= 1000
+    return f'{speed:03.1f}m'
+
 
 class NetWidget(Sink, Widget):
-    prefix = colors.FADED(" ")
+    prefix = colors.ICON(" ")
 
     def __init__(self, interfaces=None, **kwargs):
         super().__init__(**kwargs)
@@ -132,8 +139,9 @@ class NetWidget(Sink, Widget):
                 self.data["upspeed"] += float(value)
             elif key.startswith("downspeedf"):
                 self.data["downspeed"] += float(value)
-        self.text = r"{upspeed:>5.1f}{grey}u{reset} {downspeed:>5.1f}{grey}d{reset}".format(
+        self.text = r"{upspeed}{grey}u{reset} {downspeed}{grey}d{reset}".format(
             reset=colors.RESET.fg,
             grey=colors.FADED.fg,
-            **self.data
+            downspeed = format_speed(self.data["downspeed"]),
+            upspeed = format_speed(self.data["upspeed"]),
         )

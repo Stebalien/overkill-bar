@@ -24,5 +24,6 @@ RESET       = Color("-")
 BRIGHT      = Color(get_color("BRIGHT", "#ffeeeeee"))
 WARNING     = Color(get_color("WARNING", "#ffff7e00"))
 HIGHLIGHT   = Color(get_color("HIGHLIGHT", '#ff589CC5'))
+ICON        = HIGHLIGHT
 
 del get_color

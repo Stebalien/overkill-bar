@@ -27,11 +27,11 @@ class Bar(PipeSink, PipeWriter, Sink, Source):
     cmd = ["lemonbar",
            "-B", colors.BACKGROUND,
            "-F", colors.DEFAULT,
-           '-g', 'x18',
+           '-g', 'x24',
            '-u', '2',
-           '-f', '-*-fixed-medium-r-normal-*-10-*-*-*-*-*-*-*',
-           '-f', '-*-montecarlo-bold-r-normal-*-11-*-*-*-*-*-*-*',
-           '-f', '-*-siji-medium-r-*-*-10-100-*-*-*-*-*-*'
+           '-f', 'Office Code Pro D Medium:size=9',
+           '-f', 'Symbola:size=9',
+           '-f', 'Material Icons:size=11'
           ]
 
     def __init__(self):

@@ -84,6 +84,6 @@ class MultiMonitorWidget(Sink, BaseWidget):
     def render(self):
 
         self.text = "".join(
-            r"%%{S%i}%%{l}%%{A:emit wm.desktop.layout next:}%s%%{A}%s" % (i, (colors.HIGHLIGHT.fg if m.focused else colors.FADED.fg) + "  " + colors.RESET.fg, t)
+            r"%%{S%i}%%{l}%%{A:emit wm.desktop.layout next:}%s%%{A}%s" % (i, (colors.HIGHLIGHT.fg if m.focused else colors.ICON.fg) + "  " + colors.RESET.fg, t)
             for i, (t, m) in enumerate(zip(self.text_pieces, self.monitors))
         )
