@@ -106,9 +106,9 @@ class BatteryWidget(SimpleWidget):
 
 def format_speed(speed):
     if speed < 100:
-        return f'{speed:<03.1f}k'
+        return f'{speed:.1f}k'
     speed /= 1000
-    return f'{speed:03.1f}m'
+    return f'{speed:.1f}m'
 
 
 class NetWidget(Sink, Widget):
@@ -139,7 +139,7 @@ class NetWidget(Sink, Widget):
                 self.data["upspeed"] += float(value)
             elif key.startswith("downspeedf"):
                 self.data["downspeed"] += float(value)
-        self.text = r"{upspeed}{grey}u{reset} {downspeed}{grey}d{reset}".format(
+        self.text = r"{upspeed:>5s}{grey}u{reset} {downspeed:>5s}{grey}d{reset}".format(
             reset=colors.RESET.fg,
             grey=colors.FADED.fg,
             downspeed = format_speed(self.data["downspeed"]),
