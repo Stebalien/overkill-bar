@@ -24,17 +24,17 @@ from . import colors
 __all__ = ("Bar",)
 
 class Bar(PipeSink, PipeWriter, Sink, Source):
-    cmd = ["lemonbar",
-           "-B", colors.BACKGROUND,
-           "-F", colors.DEFAULT,
-           '-g', 'x24',
-           '-u', '2',
-           '-f', 'Office Code Pro D Medium:size=9',
-           '-f', 'Symbola:size=9',
-           '-f', 'Material Icons:size=11'
-          ]
 
-    def __init__(self):
+    def __init__(self, geometry='x24', font='Office Code Pro D Medium:size=9'):
+        self.cmd = ["lemonbar",
+                    "-B", colors.BACKGROUND,
+                    "-F", colors.DEFAULT,
+                    '-g', geometry,
+                    '-u', '2',
+                    '-f', font,
+                    '-f', 'Symbola:size=9',
+                    '-f', 'Material Icons:size=11'
+        ]
         super().__init__()
 
     def set_widget(self, widget):
